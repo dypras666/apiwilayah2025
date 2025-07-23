@@ -104,6 +104,9 @@ if (process.env.NODE_ENV !== 'production') {
     logger.info(`📚 Swagger Docs: http://localhost:${PORT}/api-docs`);
     logger.info(`🏥 Health check: http://localhost:${PORT}/health`);
   });
+} else {
+  // For Vercel deployment
+  logger.info('🚀 API Wilayah Indonesia ready for production');
 }
 
 module.exports = app;
