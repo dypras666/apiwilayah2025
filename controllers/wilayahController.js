@@ -9,12 +9,25 @@ class WilayahController {
     this.regencies = null;
     this.districts = null;
     this.villages = null;
-    this.loadData();
+  }
+
+  static getInstance() {
+    if (!WilayahController.instance) {
+      WilayahController.instance = new WilayahController();
+      WilayahController.instance.loadData();
+    }
+    return WilayahController.instance;
   }
 
   // Load and parse CSV data
   loadData() {
     try {
+      // Initialize with empty arrays to prevent crashes
+      this.provinces = [];
+      this.regencies = [];
+      this.districts = [];
+      this.villages = [];
+      
       // Load provinces
       const provincesPath = path.join(__dirname, '../assets/wilayah/provinces.csv');
       this.provinces = this.parseCSV(provincesPath, ['id', 'name']);
@@ -39,6 +52,11 @@ class WilayahController {
       });
     } catch (error) {
       logger.error('Error loading wilayah data:', error);
+      // Initialize with empty arrays on error to prevent crashes
+      this.provinces = this.provinces || [];
+      this.regencies = this.regencies || [];
+      this.districts = this.districts || [];
+      this.villages = this.villages || [];
     }
   }
 
@@ -75,7 +93,7 @@ class WilayahController {
     try {
       logger.info(`[WILAYAH] Get provinces request from IP: ${clientIP}`);
       
-      const controller = new WilayahController();
+      const controller = WilayahController.getInstance();
       
       if (!controller.provinces || controller.provinces.length === 0) {
         return res.status(500).json({
@@ -126,7 +144,7 @@ class WilayahController {
         });
       }
       
-      const controller = new WilayahController();
+      const controller = WilayahController.getInstance();
       
       if (!controller.regencies || controller.regencies.length === 0) {
         return res.status(500).json({
@@ -182,7 +200,7 @@ class WilayahController {
         });
       }
       
-      const controller = new WilayahController();
+      const controller = WilayahController.getInstance();
       
       if (!controller.districts || controller.districts.length === 0) {
         return res.status(500).json({
@@ -238,7 +256,7 @@ class WilayahController {
         });
       }
       
-      const controller = new WilayahController();
+      const controller = WilayahController.getInstance();
       
       if (!controller.villages || controller.villages.length === 0) {
         return res.status(500).json({
@@ -294,7 +312,7 @@ class WilayahController {
         });
       }
       
-      const controller = new WilayahController();
+      const controller = WilayahController.getInstance();
       
       if (!controller.provinces || controller.provinces.length === 0) {
         return res.status(500).json({
